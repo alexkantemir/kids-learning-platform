@@ -1,0 +1,40 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# Node / Next.js
+node_modules/
+.next/
+dist/
+build/
+
+# Docker volumes
+postgres_data/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Task / planning files (internal)
+claude_task.md
+validator_task.md
+kids_improvements.md
+fillblank_fix.md
+children-learning-platform-mvp-spec.md
+reports/
+
+# Claude Code memory
+.claude/
