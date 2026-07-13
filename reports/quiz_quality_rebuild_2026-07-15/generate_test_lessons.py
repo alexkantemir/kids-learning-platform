@@ -29,9 +29,11 @@ from app.services.gigachat import generate_lesson_raw
 from app.services.lesson_generator import _build_prompt
 from app.services.lesson_pipeline import (
     assemble_lesson_dict,
+    check_content_arithmetic,
     generate_lesson_content,
     generate_questions,
     verify_and_repair_questions,
+    verify_content_consistency,
 )
 
 OUT_DIR = Path(__file__).parent
@@ -71,12 +73,28 @@ async def generate_old(title: str, age: int, difficulty: int) -> dict:
 
 
 async def generate_new(title: str, age: int, difficulty: int) -> dict:
+    """Подключены content_arithmetic/content_consistency (сессия 6 — долг
+    сессии 4: функции существовали, но не вызывались нигде). Здесь, в
+    измерительном скрипте, не блокируем генерацию при найденной проблеме
+    (в отличие от generate_and_save_lesson_new) — записываем диагностику
+    в "_content_checks", чтобы её было видно в lessons_out_new/*.json и
+    check_lessons.py мог её учитывать."""
     child = Child(name="Тест", age=age, grade=_grade_for_age(age))
     topic = Topic(title=title, difficulty=difficulty)
     content = await generate_lesson_content(child, topic, SUBJECT, difficulty)
+
+    arith_problems = check_content_arithmetic(content)
+    consistency = await verify_content_consistency(content)
+
     drafts = await generate_questions(content)
     verified, passthrough = await verify_and_repair_questions(content, drafts)
-    return assemble_lesson_dict(content, verified, passthrough)
+    lesson = assemble_lesson_dict(content, verified, passthrough)
+    lesson["_content_checks"] = {
+        "arithmetic_problems": arith_problems,
+        "consistent": consistency.consistent,
+        "consistency_issues": consistency.issues,
+    }
+    return lesson
 
 
 async def main() -> None:
