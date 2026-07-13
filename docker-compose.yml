@@ -54,6 +54,9 @@ services:
       GIGACHAT_SCOPE: ${GIGACHAT_SCOPE}
       ENVIRONMENT: production
       USE_NEW_LESSON_PIPELINE: ${USE_NEW_LESSON_PIPELINE:-false}
+      LLM_PROVIDER: ${LLM_PROVIDER:-gigachat}
+      PROXYAPI_KEY: ${PROXYAPI_KEY:-}
+      PROXYAPI_MODEL: ${PROXYAPI_MODEL:-claude-sonnet-5}
     depends_on:
       postgres:
         condition: service_healthy

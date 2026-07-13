@@ -28,6 +28,12 @@ check_content_arithmetic и verify_content_consistency реально вызыв
 задачи, где автор и судья — одна и та же модель под разными промптами)
 признан ограничением МОДЕЛИ (GigaChat), не архитектуры. Дожимать в рамках
 Этапа 1 не стали, дальше — Этап 2 (смена движка на сильную модель).
+
+Этап 2, сессия 1 (TASK_STAGE2.md): все вызовы LLM здесь идут через
+app.services.llm_client.generate_llm_raw() — этот модуль не знает и не
+должен знать, GigaChat под ней или proxyapi.ru (сильная модель). Бэкенд
+переключается settings.LLM_PROVIDER, конфигом, без правок кода. Старый
+путь (lesson_generator.py) по-прежнему ходит в GigaChat напрямую.
 """
 import ast
 import dataclasses
@@ -45,7 +51,7 @@ from app.models.subject import Subject
 from app.models.topic import Topic
 from app.schemas.lesson import AILessonResponse
 from app.services.gamification import check_and_award_achievements, update_streak, update_subject_progress
-from app.services.gigachat import generate_lesson_raw
+from app.services.llm_client import generate_llm_raw
 from app.services.lesson_generator import STEP_TYPE_MAP, _build_step_data
 
 DIFFICULTY_NAMES = {1: "лёгкий", 2: "средний", 3: "сложный"}
@@ -248,14 +254,14 @@ async def generate_lesson_content(
 ) -> LessonContent:
     """Вызов 1 — генератор контента. Только текст урока, без вопросов."""
     prompt = _build_content_prompt(child, topic, subject, difficulty)
-    raw = await generate_lesson_raw(prompt)
+    raw = await generate_llm_raw(prompt)
     return _parse_content(raw)
 
 
 async def generate_questions(content: LessonContent) -> list[DraftQuestion]:
     """Вызов 2 — генератор вопросов строго по тексту из вызова 1."""
     prompt = _build_questions_prompt(content)
-    raw = await generate_lesson_raw(prompt)
+    raw = await generate_llm_raw(prompt)
     return _parse_questions(raw)
 
 
@@ -278,7 +284,7 @@ async def verify_question(content: LessonContent, question: DraftQuestion) -> Ve
                                 verifier_correct_index=code_idx, reason=reason)
 
     prompt = _build_verifier_prompt(content, question)
-    raw = await generate_lesson_raw(prompt)
+    raw = await generate_llm_raw(prompt)
     return _parse_verdict(question, raw)
 
 
@@ -287,7 +293,7 @@ async def verify_content_consistency(content: LessonContent) -> ContentVerdict:
     явные фактические ошибки в правилах — независимо от квиза (решение
     владельца по итогам сессии 2, TASK_STAGE1_v4.md)."""
     prompt = _build_consistency_prompt(content)
-    raw = await generate_lesson_raw(prompt)
+    raw = await generate_llm_raw(prompt)
     return _parse_consistency(raw)
 
 
@@ -324,7 +330,7 @@ async def _regenerate_single_question(
 строго в формате: {format_hint}"""
 
     try:
-        raw = await generate_lesson_raw(prompt)
+        raw = await generate_llm_raw(prompt)
     except Exception:
         return None
 

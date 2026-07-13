@@ -20,5 +20,13 @@ class Settings(BaseSettings):
     # (lesson_generator.py) без правки кода — выключить и передеплоить.
     USE_NEW_LESSON_PIPELINE: bool = False
 
+    # TASK_STAGE2.md, сессия 1: какой бэкенд использует НОВЫЙ пайплайн
+    # (lesson_pipeline.py, через app/services/llm_client.py). Старый путь
+    # (lesson_generator.py) всегда ходит в GigaChat напрямую, этот переключатель
+    # его не касается. "gigachat" | "proxyapi".
+    LLM_PROVIDER: str = "gigachat"
+    PROXYAPI_KEY: str = ""
+    PROXYAPI_MODEL: str = "claude-sonnet-5"
+
 
 settings = Settings()
