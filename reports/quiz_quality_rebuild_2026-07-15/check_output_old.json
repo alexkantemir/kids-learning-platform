@@ -1,0 +1,121 @@
+{
+  "results": [
+    {
+      "file": "lesson_01.json",
+      "title": "Счёт до 10",
+      "validate_lesson_valid": false,
+      "validate_lesson_errors": [
+        "correct_answers: При нескольких пропусках correct_answers должен быть массивом массивов"
+      ],
+      "quiz_problems": [],
+      "defective": true,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_02.json",
+      "title": "Секреты сложения",
+      "validate_lesson_valid": false,
+      "validate_lesson_errors": [
+        "correct_order: correct_order содержит элементы не из items"
+      ],
+      "quiz_problems": [],
+      "defective": true,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_03.json",
+      "title": "Уменьшаем числа до 20",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_04.json",
+      "title": "Умножение на 2 и 3",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_05.json",
+      "title": "Деление без остатка",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [
+        {
+          "quiz_index": 1,
+          "question": "Какое число является делителем в выражении 24 : 6?",
+          "issue": "код вычислил 4.0 (это options[2]), но correct=1"
+        }
+      ],
+      "defective": true,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 1
+    },
+    {
+      "file": "lesson_06.json",
+      "title": "Порядок действий в математике",
+      "validate_lesson_valid": false,
+      "validate_lesson_errors": [
+        "correct_index: Правильный ответ 11 (8 + 3) отсутствует среди вариантов: [14, 20, 10]",
+        "correct_answers: В тексте 4 пропуска, но correct_answers содержит 2 элементов"
+      ],
+      "quiz_problems": [],
+      "defective": true,
+      "quiz_question_count": 4,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_07.json",
+      "title": "Половина и Четверть",
+      "validate_lesson_valid": false,
+      "validate_lesson_errors": [
+        "correct_answers: При нескольких пропусках correct_answers должен быть массивом массивов"
+      ],
+      "quiz_problems": [],
+      "defective": true,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_08.json",
+      "title": "Сложение дробей с общим знаменателем",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_09.json",
+      "title": "Расчёт периметра и площади прямоугольника",
+      "validate_lesson_valid": false,
+      "validate_lesson_errors": [
+        "correct_order: correct_order содержит элементы не из items"
+      ],
+      "quiz_problems": [],
+      "defective": true,
+      "quiz_question_count": 4,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_10.json",
+      "title": "Базовые понятия процентов",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 4,
+      "quiz_defect_count": 0
+    }
+  ]
+}

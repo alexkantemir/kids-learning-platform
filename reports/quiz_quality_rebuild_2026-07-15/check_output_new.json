@@ -1,0 +1,104 @@
+{
+  "results": [
+    {
+      "file": "lesson_01.json",
+      "title": "Увлекательный счёт до 10",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 1,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_02.json",
+      "title": "Секреты сложения",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_03.json",
+      "title": "Увлекательное вычитание до 20",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_04.json",
+      "title": "Увлекательное умножение на 2 и 3",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_05.json",
+      "title": "Удивительное деление без остатка",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_06.json",
+      "title": "Путешествие к островам математики",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_07.json",
+      "title": "Половина и Четверть",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_08.json",
+      "title": "Секреты волшебного сундучка с дробями",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 1,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_09.json",
+      "title": "Загадки Прямоугольника: Периметр и Площадь",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 2,
+      "quiz_defect_count": 0
+    },
+    {
+      "file": "lesson_10.json",
+      "title": "Загадки Процентов",
+      "validate_lesson_valid": true,
+      "validate_lesson_errors": [],
+      "quiz_problems": [],
+      "defective": false,
+      "quiz_question_count": 1,
+      "quiz_defect_count": 0
+    }
+  ]
+}
