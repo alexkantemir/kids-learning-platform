@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
+from app.core.config import settings
 from app.db.session import get_db
 from app.models.user import User, UserRole
 from app.models.child import Child
@@ -10,6 +11,7 @@ from app.models.lesson import Lesson
 from app.schemas.lesson import LessonGenerateRequest
 from app.api.deps import get_current_user
 from app.services.lesson_generator import generate_and_save_lesson
+from app.services.lesson_pipeline import generate_and_save_lesson_new
 
 router = APIRouter()
 
@@ -41,7 +43,8 @@ async def generate_lesson(
     await _get_child_for_user(user, data.child_id, db)
 
     try:
-        lesson = await generate_and_save_lesson(
+        generator = generate_and_save_lesson_new if settings.USE_NEW_LESSON_PIPELINE else generate_and_save_lesson
+        lesson = await generator(
             child_id=data.child_id,
             topic_id=data.topic_id,
             difficulty=data.difficulty,

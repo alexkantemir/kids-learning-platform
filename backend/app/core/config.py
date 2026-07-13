@@ -16,5 +16,9 @@ class Settings(BaseSettings):
 
     ENVIRONMENT: str = "production"
 
+    # TASK_STAGE1_v4.md, сессия 4: флаг для отката на старый generate_and_save_lesson
+    # (lesson_generator.py) без правки кода — выключить и передеплоить.
+    USE_NEW_LESSON_PIPELINE: bool = False
+
 
 settings = Settings()

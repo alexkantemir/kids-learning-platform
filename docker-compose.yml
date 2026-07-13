@@ -53,6 +53,7 @@ services:
       GIGACHAT_CLIENT_SECRET: ${GIGACHAT_CLIENT_SECRET}
       GIGACHAT_SCOPE: ${GIGACHAT_SCOPE}
       ENVIRONMENT: production
+      USE_NEW_LESSON_PIPELINE: ${USE_NEW_LESSON_PIPELINE:-false}
     depends_on:
       postgres:
         condition: service_healthy
