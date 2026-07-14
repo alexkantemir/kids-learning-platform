@@ -1,0 +1,140 @@
+{
+  "usage_log": [
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 545,
+      "output_tokens": 1753
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1603,
+      "output_tokens": 1074
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 3262,
+      "output_tokens": 2354
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1565,
+      "output_tokens": 349
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1570,
+      "output_tokens": 362
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1522,
+      "output_tokens": 478
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1522,
+      "output_tokens": 593
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1712,
+      "output_tokens": 89
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1740,
+      "output_tokens": 88
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1523,
+      "output_tokens": 376
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1522,
+      "output_tokens": 392
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 533,
+      "output_tokens": 1412
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1415,
+      "output_tokens": 798
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 3074,
+      "output_tokens": 2179
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1512,
+      "output_tokens": 83
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1560,
+      "output_tokens": 65
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1542,
+      "output_tokens": 90
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1547,
+      "output_tokens": 86
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1533,
+      "output_tokens": 68
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 535,
+      "output_tokens": 1578
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1572,
+      "output_tokens": 1133
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 3231,
+      "output_tokens": 2258
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1666,
+      "output_tokens": 64
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1676,
+      "output_tokens": 63
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1667,
+      "output_tokens": 66
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1677,
+      "output_tokens": 85
+    },
+    {
+      "model": "claude-sonnet-5",
+      "input_tokens": 1669,
+      "output_tokens": 64
+    }
+  ],
+  "total_cost_rub_estimate": 116.59599999999999
+}

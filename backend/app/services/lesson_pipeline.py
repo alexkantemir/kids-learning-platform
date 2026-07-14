@@ -68,6 +68,7 @@ _EXPR_EQUALS_RE = re.compile(
 )
 _ARITH_TRANSLATE = str.maketrans({'×': '*', '÷': '/', '−': '-', ':': '/', ',': '.'})
 _ARITH_NORMALIZED_RE = re.compile(r'[\d.()+\-*/]+')  # финальный regex-гейт перед ast.parse
+_FRACTION_RE = re.compile(r'-?\d+(?:\.\d+)?/-?\d+(?:\.\d+)?')  # "N/M" как ОДНО число, не выражение
 
 # ── AST-белый список: LLM-строка никогда не доходит до eval/exec ───────────
 # Разрешены ТОЛЬКО числовые константы и арифметические операции. Любой
@@ -159,16 +160,51 @@ def _eval_arith_chain(expr: str) -> float | None:
         return None
 
 
+def _parse_numeric_option(opt: str) -> float | None:
+    """Разбирает вариант ответа в число — понимает и десятичную запись,
+    и дробь "N/M" (Этап 2, сессия 2: находка сессии 6 Этапа 1 — quiz с
+    вариантами-дробями вроде "1/2"/"3/6" раньше вообще не доходил до
+    кодовой проверки, потому что float("1/2") падает с ValueError, и
+    check_question_arithmetic решал, что варианты "не числа", код не
+    судья. Теперь дробь парсится как число — 1/2 и 3/6 оба дают 0.5,
+    и код может заметить, что это одно и то же значение под разными
+    масками (см. ambiguous в check_question_arithmetic)."""
+    s = str(opt).strip().translate(_ARITH_TRANSLATE)
+    try:
+        return float(s)
+    except ValueError:
+        pass
+    if _FRACTION_RE.fullmatch(s):
+        num_str, denom_str = s.split('/', 1)
+        try:
+            denom = float(denom_str)
+        except ValueError:
+            return None
+        if denom == 0:
+            return None
+        return float(num_str) / denom
+    return None
+
+
 def check_question_arithmetic(
     question_text: str, options: list[str] | None,
-) -> tuple[bool, int | None, float | None]:
+) -> tuple[bool, int | None, float | None, bool]:
     """Если question_text содержит вычислимую арифметическую цепочку
     (учитывает порядок операций и скобки — через ast, не eval, и не одну
     пару число-оператор-число, как было в старом lesson_validator) —
     вычисляет её кодом и ищет совпадающий вариант в options.
 
-    Возвращает (is_arithmetic, correct_index_by_code, expected_value).
-    is_arithmetic=False — код не применим, решает судья (вызов 3).
+    Возвращает (is_arithmetic, correct_index_by_code, expected_value,
+    ambiguous). is_arithmetic=False — код не применим, решает судья
+    (вызов 3). ambiguous=True — ДВА И БОЛЕЕ варианта численно совпадают
+    с вычисленным значением (например, "1/2" и "3/6" — сокращённая и
+    несокращённая запись одной дроби, найдено сессией 6 Этапа 1 как
+    неразрешимая для судьи двусмысленность): в этом случае correct_index
+    по-прежнему возвращается (первый найденный), но вызывающий код должен
+    считать вопрос дефектным независимо от того, что говорит
+    author_correct_index — раз кодовая проверка сама не может выбрать
+    единственный правильный вариант, у ребёнка тем более не будет
+    однозначного ответа.
 
     Важно: код включается, ТОЛЬКО если варианты ответа сами числовые.
     Иначе вопрос может спрашивать не "чему равно выражение", а "в каком
@@ -177,16 +213,11 @@ def check_question_arithmetic(
     проверки код ложно бракует корректные вопросы такого рода (найдено
     живым прогоном в сессии 3 на теме "Порядок действий в примерах")."""
     if not options:
-        return False, None, None
+        return False, None, None, False
 
-    numeric_options: list[float | None] = []
-    for opt in options:
-        try:
-            numeric_options.append(float(str(opt).strip().translate(_ARITH_TRANSLATE)))
-        except ValueError:
-            numeric_options.append(None)
+    numeric_options = [_parse_numeric_option(opt) for opt in options]
     if not any(v is not None for v in numeric_options):
-        return False, None, None  # варианты не числа — не вопрос "чему равно", код не судья
+        return False, None, None, False  # варианты не числа — не вопрос "чему равно", код не судья
 
     # finditer, не search: широкий charset (см. _ARITH_CHARSET) может сперва
     # зацепить тривиальный фрагмент вроде одинокого пробела или скобки перед
@@ -198,14 +229,12 @@ def check_question_arithmetic(
         if expected is not None:
             break
     if expected is None:
-        return False, None, None
+        return False, None, None, False
 
-    correct_idx = None
-    for i, val in enumerate(numeric_options):
-        if val is not None and abs(val - expected) < 0.001:
-            correct_idx = i
-            break
-    return True, correct_idx, expected
+    matches = [i for i, val in enumerate(numeric_options) if val is not None and abs(val - expected) < 0.001]
+    ambiguous = len(matches) > 1
+    correct_idx = matches[0] if matches else None
+    return True, correct_idx, expected, ambiguous
 
 
 def check_content_arithmetic(content: LessonContent) -> list[dict]:
@@ -270,8 +299,14 @@ async def verify_question(content: LessonContent, question: DraftQuestion) -> Ve
     правильного, сам решает ответ. Где ответ вычислим кодом (арифметика) —
     код главнее судьи, LLM вообще не вызывается (быстрее и не может
     ошибиться там, где есть точный расчёт)."""
-    is_arith, code_idx, expected = check_question_arithmetic(question.question, question.options)
+    is_arith, code_idx, expected, ambiguous = check_question_arithmetic(question.question, question.options)
     if is_arith:
+        if ambiguous:
+            return VerifiedQuestion(
+                draft=question, accepted=False, verifier_correct_index=None,
+                reason=(f"Код нашёл НЕСКОЛЬКО вариантов, численно равных {expected:g} "
+                        f"(например, разные записи одной и той же дроби) — вопрос неоднозначен."),
+            )
         accepted = code_idx is not None and code_idx == question.author_correct_index
         reason = None
         if not accepted:

@@ -30,15 +30,23 @@ OUT_DIR = Path(__file__).parent
 
 
 def check_quiz_arithmetic(quiz: list[dict]) -> list[dict]:
+    """check_question_arithmetic теперь возвращает 4-й элемент — ambiguous
+    (Этап 2, сессия 2: код понимает эквивалентные дроби, 1/2 и 3/6 —
+    находка сессии 6 Этапа 1)."""
     problems = []
     for i, q in enumerate(quiz):
         question = q.get("question") or ""
         options = q.get("options") or []
         claimed = q.get("correct")
-        is_arith, code_idx, expected = check_question_arithmetic(question, options)
+        is_arith, code_idx, expected, ambiguous = check_question_arithmetic(question, options)
         if not is_arith:
             continue
-        if code_idx is None:
+        if ambiguous:
+            problems.append({
+                "quiz_index": i, "question": question,
+                "issue": f"несколько вариантов численно равны {expected} (например, разные записи одной дроби) — неоднозначно",
+            })
+        elif code_idx is None:
             problems.append({
                 "quiz_index": i, "question": question,
                 "issue": f"код вычислил {expected}, такого варианта нет среди options",
